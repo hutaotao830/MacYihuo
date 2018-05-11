@@ -83,12 +83,35 @@ def by_camera():
 
 
 def by_video_file():
-    file_path = 'output.avi'
+    file_path = '/Users/huyangjie/Documents/onion_myMovie.mp4'
     # file_path = '/Users/huyangjie/Downloads/opencv-3.4.0/samples/data/vtest.avi'
     cap = cv.VideoCapture(file_path)
     print(cap)
     while True:
-        ret, frame = cap.read()
+        try:
+            ret, frame = cap.read()
+            frame2 = cv.cvtColor(frame, cv.COLOR_RGB2GRAY)
+        except Exception as e:
+            print(e)
+            break
+        ret, thresh = cv.threshold(frame2, 127, 255, 1)
+        _, contours, _ = cv.findContours(thresh, 1, 2)
+        for cnt in contours:
+            area = cv.contourArea(cnt)
+            (x, y), radius = cv.minEnclosingCircle(cnt)
+            if area > 200 and area/(3.14*(radius**2)) > 0.9:
+                for c in contours:
+                    (x1, y1), radius2 = cv.minEnclosingCircle(c)
+                    l = ((x1-x)**2+(y1-y)**2)**0.5
+                    if l < radius/2:
+                        # print('l', l)
+                        # print('r', radius)
+                        # print()
+                        cv.circle(frame, (int(x1), int(y1)), int(radius2), (0, 255, 0), 1)
+
+                cv.circle(frame, (int(x), int(y)), int(radius), (0, 0, 255), 2)
+                cv.circle(frame, (int(x), int(y)), 2, (255, 0, 0), 3)
+                # cv.line(frame, (int(x), int(y)), (int(x+radius), int(y+radius)), (0, 255, 255), 2)
         cv.imshow('video_file', frame)
         if cv.waitKey(1) & 0xff == ord('q'):
             break
@@ -98,3 +121,32 @@ def by_video_file():
 
 if __name__ == '__main__':
     by_video_file()
+    pass
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
