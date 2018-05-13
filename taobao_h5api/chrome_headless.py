@@ -7,6 +7,40 @@ import cv2 as cv
 import numpy as np
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
+import win32gui
+import win32api
+from win32gui import *
+import pyautogui
+
+
+def my_pyautogui():
+    screenWidth, screenHeight = pyautogui.size()
+    pyautogui.moveTo(screenWidth/2, screenHeight/2)
+
+
+
+titles = set()
+
+
+def foo(hwnd, mouse):
+    # 去掉下面这句就所有都输出了，但是我不需要那么多
+    if IsWindow(hwnd) and IsWindowEnabled(hwnd) and IsWindowVisible(hwnd):
+        titles.add(GetWindowText(hwnd))
+
+
+# EnumWindows(foo, 0)
+# lt = [t for t in titles if t]
+# lt.sort()
+# for t in lt:
+#     print(t)
+
+
+def windows_api():
+    classname = 'notepad'
+    # titlename = '无标题-记事本'
+    t = '无标题 - 记事本'
+    hwnd = win32gui.FindWindow(classname, t)
+    l, t, r, b = win32gui.GetWindowRect(hwnd)
 
 
 def firs():
@@ -82,4 +116,5 @@ def imitation_mobile():
 
 
 if __name__ == '__main__':
-    imitation_mobile()
+    # windows_api()
+    pass
