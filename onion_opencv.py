@@ -85,11 +85,14 @@ def by_camera():
 def by_video_file():
     file_path = '/Users/huyangjie/Documents/onion_myMovie.mp4'
     # file_path = '/Users/huyangjie/Downloads/opencv-3.4.0/samples/data/vtest.avi'
-    cap = cv.VideoCapture(file_path)
+    cap = cv.VideoCapture(1)
     print(cap)
     while True:
         try:
             ret, frame = cap.read()
+            w, h, c = frame.shape
+            # print(w, h)
+            empty_img = np.zeros((w, h, 3), np.uint8)
             frame2 = cv.cvtColor(frame, cv.COLOR_RGB2GRAY)
         except Exception as e:
             print(e)
@@ -99,18 +102,28 @@ def by_video_file():
         for cnt in contours:
             area = cv.contourArea(cnt)
             (x, y), radius = cv.minEnclosingCircle(cnt)
-            if area > 200 and area/(3.14*(radius**2)) > 0.9:
+            if area > 200 and area/(3.14*(radius**2)) > 0.8:
+                center_dict = {'x' : [], 'y' : []}
                 for c in contours:
+                    area_in = cv.contourArea(c)
                     (x1, y1), radius2 = cv.minEnclosingCircle(c)
                     l = ((x1-x)**2+(y1-y)**2)**0.5
-                    if l < radius/2:
+                    if l < radius/1.2 and area_in/(3.14*(radius2**2)) > 0.3:
                         # print('l', l)
                         # print('r', radius)
                         # print()
-                        cv.circle(frame, (int(x1), int(y1)), int(radius2), (0, 255, 0), 1)
-
+                        center_dict['x'].append(int(x1))
+                        center_dict['y'].append(int(y1))
+                        # cv.circle(frame, (int(x1), int(y1)), int(radius2), (0, 255, 0), 1)
+                        # cv.circle(empty_img, (int(x1), int(y1)), int(radius2), (0, 255, 0), 1)
+                if len(center_dict['x']) > 5:
+                    mean_x, mean_y = sum(center_dict['x'])/len(center_dict['x']), sum(center_dict['y'])/len(center_dict['y'])
+                    cv.circle(empty_img, (int(mean_x), int(mean_y)), 5, (255, 255, 255), 3)
+                    cv.circle(frame, (int(mean_x), int(mean_y)), 5, (255, 255, 255), 3)
                 cv.circle(frame, (int(x), int(y)), int(radius), (0, 0, 255), 2)
+                cv.circle(empty_img, (int(x), int(y)), int(radius), (0, 0, 255), 2)
                 cv.circle(frame, (int(x), int(y)), 2, (255, 0, 0), 3)
+                cv.circle(empty_img, (int(x), int(y)), 2, (255, 0, 0), 3)
                 # cv.line(frame, (int(x), int(y)), (int(x+radius), int(y+radius)), (0, 255, 255), 2)
         cv.imshow('video_file', frame)
         if cv.waitKey(1) & 0xff == ord('q'):

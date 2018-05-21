@@ -7,9 +7,9 @@ import cv2 as cv
 import numpy as np
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
-import win32gui
-import win32api
-from win32gui import *
+# import win32gui
+# import win32api
+# from win32gui import *
 import pyautogui
 
 
