@@ -17,7 +17,7 @@ number = 4
 # 生成验证码图片的高度和宽度
 size = (100, 30)
 # 背景颜色，默认为白色
-bgcolor = (255, 255, 255)
+bgcolor = (0, 0, 0)
 # 字体颜色，默认为蓝色
 fontcolor = (0, 0, 255)
 # 干扰线颜色。默认为红色
@@ -56,8 +56,8 @@ def gene_code():
     if draw_line:
         gene_line(draw, width, height)
     # image = image.transform((width+30,height+10), Image.AFFINE, (1,-0.3,0,-0.1,1,0),Image.BILINEAR)  #创建扭曲
-    image = image.transform((width + 20, height + 10), Image.AFFINE,
-                            (random.uniform(0.6, 1), random.uniform(-0.5, 0.5), 0, random.uniform(-0.1, 0.1), 1, 0),
+    image = image.transform((width, height), Image.AFFINE,
+                            (random.uniform(0.8, 1.2), random.uniform(-0.5, 0.5), 0, random.uniform(-0.1, 0.1), 1, 0),
                             Image.BILINEAR)  # 创建扭曲(参数1：左右留白大小，2：左右扭曲度, 3:do't konw, 4:左右旋转度，5：
     image = image.filter(ImageFilter.EDGE_ENHANCE_MORE)  # 滤镜，边界加强
     # image.save('idencode.png')  # 保存验证码图片
