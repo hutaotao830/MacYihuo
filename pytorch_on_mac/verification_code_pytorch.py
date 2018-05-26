@@ -10,6 +10,9 @@ from PIL import Image, ImageDraw, ImageFont, ImageFilter
 import matplotlib.pyplot as plt
 import random
 
+all_letters = string.digits + string.ascii_lowercase
+letters_dict = {k: v for v, k in enumerate(all_letters)}
+
 # 字体的位置，不同版本的系统会有不同
 font_path = '/Library/Fonts/Arial.ttf'
 # 生成几位数的验证码
@@ -68,7 +71,10 @@ def gene_code():
             n = ord(s) + 32
             s = chr(n)
         s2 += s
-    yield image, s2
+    s_list = [-1]*36
+    for n, a in enumerate(s2):
+        s_list[n] = letters_dict[a]
+    yield image, s_list
 
 
 if __name__ == "__main__":
