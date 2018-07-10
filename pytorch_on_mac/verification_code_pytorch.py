@@ -14,7 +14,7 @@ all_letters = string.digits + string.ascii_lowercase
 letters_dict = {k: v for v, k in enumerate(all_letters)}
 
 # 字体的位置，不同版本的系统会有不同
-font_path = '/Library/Fonts/Arial.ttf'
+font_path = 'fonts/Roboto-Black.ttf'
 # 生成几位数的验证码
 number = 4
 # 生成验证码图片的高度和宽度
@@ -79,10 +79,13 @@ def gene_code():
 
 if __name__ == "__main__":
     t1 = time.time()
-    for i in range(1, 101):
+    plt.figure(figsize=(8,12))
+    for i in range(1, 11):
         img, text = next(gene_code())
-        plt.subplot(10, 10, i)
-        plt.title(text)
+        plt.subplot(10, 1, i)
+        plt.title(text[0:4])
         plt.imshow(img)
+        plt.axis('off')
+        plt.tight_layout()
     print(time.time()-t1)
     plt.show()
